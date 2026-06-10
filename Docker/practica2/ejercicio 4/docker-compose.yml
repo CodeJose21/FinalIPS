@@ -1,0 +1,32 @@
+services:
+  frontend:
+    image: nginx:alpine
+    container_name: mi-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend/index.html:/usr/share/nginx/html/index.html:ro
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+
+  backend:
+    build: ./backend
+    container_name: mi-backend
+    environment:
+      POSTGRES_DB: miapp
+      POSTGRES_USER: usuario
+      POSTGRES_PASSWORD: password
+    depends_on:
+      - database
+
+  database:
+    image: postgres:15
+    container_name: app-database
+    environment:
+      POSTGRES_DB: miapp
+      POSTGRES_USER: usuario
+      POSTGRES_PASSWORD: password
+
+

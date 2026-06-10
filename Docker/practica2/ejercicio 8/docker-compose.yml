@@ -1,0 +1,58 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: mi-nginx
+    ports:
+      - "8080:8080"
+    networks:
+      - public_net
+      - application_net
+    volumes:
+      - ./nginx/html:/usr/share/nginx/html:ro
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - backend
+  
+  backend:
+    build: ./backend
+    container_name: mi-api
+    networks:
+      - application_net
+      - database_net
+    depends_on:
+      - db
+      - redis
+  
+
+  redis:
+    image: redis:alpine
+    container_name: mi-redis
+    environment:
+      REDIS_HOST: db
+      REDIS_USER: user
+      REDIS_PASSWORD: password
+    networks:
+      - application_net
+    volumes:
+      - redis_data:/data
+  
+  db:
+    image: postgres:15
+    container_name: mi-db
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    networks:
+      - database_net
+    volumes:
+      - postgres_data:/var/lib/postgresql/data 
+
+networks:
+  application_net:
+  database_net:
+  public_net:
+
+volumes:
+  postgres_data:
+  redis_data:

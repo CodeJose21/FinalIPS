@@ -1,0 +1,36 @@
+services:
+
+  db:
+    image: mysql:8.0
+    container_name: mi-db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mydb
+      MYSQL_PASSWORD: password
+      MYSQL_USER: user
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - wordpress_net
+
+  wordpress:
+    image: wordpress:latest
+    container_name: mi-wordpress
+    ports:
+    - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: user
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - wordpress_net
+
+networks:
+  wordpress_net:
+
+volumes:
+  db_data:
+  wordpress_data:

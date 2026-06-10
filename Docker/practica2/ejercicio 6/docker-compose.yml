@@ -1,0 +1,39 @@
+services:
+
+  api:
+    build: ./api
+    container_name: mi-api
+    networks:
+      - frontend
+      - backend
+  
+  nginx:
+    build: nginx:alpine
+    container_name: mi-nginx
+    ports:
+    - "5432:5432"
+    networks:
+      - frontend
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+
+  postgres:
+    image: postgres:15
+    container_name: mi-postgres
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    networks:
+    - backend
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    
+  
+networks:
+  frontend:
+  backend:
+
+volumes:
+  db_data:

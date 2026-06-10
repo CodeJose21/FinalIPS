@@ -1,0 +1,15 @@
+1. Crear configmap:
+
+kubectl create configmap postgres-config --from-literal=POSTGRES_DB=mydb --from-literal=POSTGRES_USER=myuser --dry-run=client -o yaml > postgres-configmap.yaml
+
+2. Crear Secreto
+
+kubectl create secret generic postgres-secret --from-literal=POSTGRESS-PASSWORD=mysecretpassword --dry-run=client -o yaml > postgres-secret.yaml
+
+3. Crear deployment 
+
+kubectl create deployment postgres-deployment --image=postgres:15 --replicas=1 --dry-run=client -o yaml > postgres-deployment.yaml
+
+4. Crear servicio
+
+kubectl expose deployment postgres-deployment --type=ClusterIP --port=5432 --target-port=5432 --dry-run=client -o yaml >> postgres-deployment.yaml

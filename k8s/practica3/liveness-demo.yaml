@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: liveness-demo
+  name: liveness-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: liveness-demo
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: liveness-demo
+    spec:
+      containers:
+      - image: nginx:alpine
+        name: nginx
+        resources: {}
+status: {}
+
+livenessProbe:
+ httpGet:
+ path: /
+ port: 80
+ initialDelaySeconds: 10 # segundos antes de la primera comprobación
+ periodSeconds: 5 # cada cuántos segundos se comprueba
+ failureThreshold: 3 # cuántos fallos seguidos antes de reiniciar
