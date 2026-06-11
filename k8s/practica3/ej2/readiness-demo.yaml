@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: readiness-app
+  name: readiness-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: readiness-app
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: readiness-app
+    spec:
+      containers:
+      - image: nginx:alpine
+        name: nginx
+        resources: {}
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 3
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: readiness-app
+  name: readiness-app
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: readiness-app
+  type: clusterIP
+status:
+  loadBalancer: {}
