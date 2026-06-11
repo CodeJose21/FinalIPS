@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: hpa-app
+  name: hpa-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hpa-app
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: hpa-app
+    spec:
+      containers:
+      - image: nginx:alpine
+        name: nginx
+        resources: 
+          requests:
+            memory: "50Mi"
+          limits:
+            memory: "100Mi"
+status: {}
+
